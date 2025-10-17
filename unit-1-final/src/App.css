@@ -1,0 +1,110 @@
+html, body{
+    background-color: rgb(133, 133, 133);
+    margin: 0;
+}
+body{
+    background-image: url("https://images.pexels.com/photos/709552/pexels-photo-709552.jpeg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+header, footer{
+    background-color: rgb(17, 75, 17);
+}
+header{
+    border-bottom: 5px solid black;
+}
+h1{
+    font-family: "Ranchers", sans-serif;
+}
+h2, p, .Data{
+    font-family: "Roboto", sans-serif;
+}
+footer{
+    border-top: 5px solid black;
+}
+a:link{
+    color: black;
+}
+a:visited{
+    color:brown;
+}
+a:hover{
+    color: blue;
+}
+ul{
+    text-align: center;
+    display: inline-block;
+    text-align: left;
+}
+.App{
+    text-align: center;
+    min-height: 100dvh;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    grid-template-columns: minmax(0, 1fr);
+}
+.Data{
+    margin-left: auto;
+    margin-right: auto;
+}
+.NavBar{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 1em;
+    font-family: "Roboto", sans-serif;
+}
+.Welcome, .About, .TripPage, .Profile, .CurrentEvents, .EventsPage, .MakeEvntFrm, .SignIn, .SignUp, .SignUpHeader{
+    background-color: gray;
+    padding: 1em;
+    margin: auto;
+    width: auto;
+    height: fit-content;
+    border: 2px solid black;
+}
+.SignUp{
+    display: inline-block;
+    clear: left;
+    text-align: right;
+}
+@media only screen and (max-width: 480px){
+    .Header {grid-area: 1 / span 6;}
+    .Welcome {grid-area: 2 / span 1;}
+    .EventsPage {grid-area: 2 / span 1;}
+    .About {grid-area: 2 / span 1;}
+    .TripPage {grid-area: 2 / span 1;}
+    .Profile {grid-area: 2 / span 1;}
+    .CurrentEvents {grid-area: 2 / span 1;}
+    .MakeEvntFrm {grid-area: 2 / span 1;}
+    .SignIn {grid-area: 2 / span 1;}
+    .SignUp {grid-area: 2 / span 1;}
+}
+@media only screen and (min-width: 600px) and (max-width: 768px){
+    .Header {grid-area: 1 / span 6;}
+    .Welcome {grid-area: 2 / span 1;}
+    .EventsPage {grid-area: 2 / span 1;}
+    .About {grid-area: 2 / span 1;}
+    .TripPage {grid-area: 2 / span 1;}
+    .Profile {grid-area: 2 / span 1;}
+    .CurrentEvents {grid-area: 2 / span 1;}
+    .MakeEvntFrm {grid-area: 2 / span 1;}
+    .SignIn {grid-area: 2 / span 1;}
+    .SignUp {grid-area: 2 / span 1;}
+}
+p{
+    animation-duration: 3s;
+    animation-name: slide-in;
+}
+@keyframes slide-in {
+    from {
+        translate: 150vw 0;
+        scale: 200% 1;
+    }
+    to {
+        translate: 0 0;
+        scale: 100% 1;
+    }
+}
