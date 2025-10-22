@@ -72,4 +72,5 @@ public class Event {
     public void removeAttendee(User user) {
         this.attendees.remove(user);
     }
+    test
 }
