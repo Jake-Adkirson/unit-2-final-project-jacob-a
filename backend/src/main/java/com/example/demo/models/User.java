@@ -12,14 +12,12 @@ public class User {
 
     private String name;
 
-    @Column(unique = true, nullable = false)
     private String email;
 
     //TODO: Add secure handling for passwords
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    private Watercraft prefferedWatercraft;
+    private String watercraft;
 
     private String location;
 
@@ -55,12 +53,12 @@ public class User {
         this.password = password;
     }
 
-    public Watercraft getPrefferedWatercraft() {
-        return prefferedWatercraft;
+    public String getWatercraft() {
+        return watercraft;
     }
 
-    public void setPrefferedWatercraft(Watercraft prefferedWatercraft) {
-        this.prefferedWatercraft = prefferedWatercraft;
+    public void setWatercraft(String watercraft) {
+        this.watercraft = watercraft;
     }
 
     public String getLocation() {
