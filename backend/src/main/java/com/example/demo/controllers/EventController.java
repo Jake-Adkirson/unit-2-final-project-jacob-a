@@ -5,6 +5,8 @@ import com.example.demo.models.User;
 import com.example.demo.repositories.EventRepository;
 import com.example.demo.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,19 +24,29 @@ public class EventController {
     private UserRepository userRepository;
 
     @GetMapping
-    public List<Event> getAllEvents() {
-        return eventRepository.findAll();
+    public ResponseEntity<?> getAllEvents() {
+        List<Event> allEvents = eventRepository.findAll();
+        return new ResponseEntity<>(allEvents, HttpStatus.OK);
+    }
+
+    @GetMapping(value="/{id}", produces= MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getArtworkById(@PathVariable Long eventId) throws Exception {
+        Event event = eventRepository.findById(eventId).orElse(null);
+        if (event == null) {
+          throw new Exception("Event not found");
+        }
+        return new ResponseEntity<>(event, HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<Event> createEvent(@RequestBody Event event) {
-        Event saved = eventRepository.save(event);
-        return ResponseEntity.ok(saved);
+        eventRepository.save(event);
+        return new ResponseEntity<>(event, HttpStatus.CREATED);
     }
 
     @PostMapping("/{eventId}/attendees/{userId}")
-    public ResponseEntity<?> addAttendee(@PathVariable Long eventId, @PathVariable Long userId) {
-        Optional<Event> eventOptional = eventRepository.findById(eventId);
+    public ResponseEntity<?> addAttendee(@PathVariable Long id, @PathVariable Long userId) {
+        Optional<Event> eventOptional = eventRepository.findById(id);
         Optional<User> userOptional = userRepository.findById(userId);
         if (eventOptional.isEmpty() || userOptional.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -43,5 +55,16 @@ public class EventController {
         event.addAttendee(userOptional.get());
         eventRepository.save(event);
         return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteEvent(@PathVariable Long id) throws Exception {
+        Event event = eventRepository.findById(id).orElse(null);
+        if (event == null) {
+            throw new Exception("Event not found");
+        } else {
+            eventRepository.deleteById(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
     }
 }

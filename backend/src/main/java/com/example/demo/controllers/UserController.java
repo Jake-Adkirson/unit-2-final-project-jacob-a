@@ -3,6 +3,8 @@ package com.example.demo.controllers;
 import com.example.demo.models.User;
 import com.example.demo.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,15 +18,18 @@ public class UserController {
     private UserRepository userRepository;
 
     @GetMapping
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public ResponseEntity<?> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        return userRepository.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    @GetMapping(value="/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getUserById(@PathVariable Long id) throws Exception {
+        User user = userRepository.findById(id).orElse(null);
+        if (user == null) {
+            throw new Exception("User not found");
+        }
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @PostMapping
@@ -34,7 +39,7 @@ public class UserController {
         return ResponseEntity.ok(savedUser);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/add/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User userDetails) {
         return userRepository.findById(id)
                 .map(existingUser -> {
@@ -50,8 +55,13 @@ public class UserController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable Long id){
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable Long id) throws Exception {
+        User user = userRepository.findById(id).orElse(null);
+        if (user == null) {
+            throw new Exception("User not found");
+        }
         userRepository.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
