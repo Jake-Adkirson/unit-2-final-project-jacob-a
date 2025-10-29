@@ -29,9 +29,9 @@ public class EventController {
         return new ResponseEntity<>(allEvents, HttpStatus.OK);
     }
 
-    @GetMapping(value="/{id}", produces= MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getArtworkById(@PathVariable Long eventId) throws Exception {
-        Event event = eventRepository.findById(eventId).orElse(null);
+    @GetMapping(value="{id}", produces= MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getArtworkById(@PathVariable Long id) throws Exception {
+        Event event = eventRepository.findById(id).orElse(null);
         if (event == null) {
           throw new Exception("Event not found");
         }
@@ -44,7 +44,7 @@ public class EventController {
         return new ResponseEntity<>(event, HttpStatus.CREATED);
     }
 
-    @PostMapping("/{eventId}/attendees/{userId}")
+    @PostMapping("/{id}/attendees/{userId}")
     public ResponseEntity<?> addAttendee(@PathVariable Long id, @PathVariable Long userId) {
         Optional<Event> eventOptional = eventRepository.findById(id);
         Optional<User> userOptional = userRepository.findById(userId);
