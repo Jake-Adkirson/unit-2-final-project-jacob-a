@@ -19,6 +19,8 @@ public class User {
 
     private String watercraft;
 
+    private int age;
+
     private String location;
 
     public User(){
@@ -43,6 +45,14 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
     }
 
     public String getPassword() {
