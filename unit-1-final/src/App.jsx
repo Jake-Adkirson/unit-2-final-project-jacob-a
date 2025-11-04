@@ -9,7 +9,8 @@ import About from './components/About';
 import CreateEvent from './components/CreateEvent';
 import JoinEvent from './components/JoinEvent';
 import TripPage from './components/TripPage';
-import SignInSignUp from './components/SignInSignUp';
+import SignUp from './components/SignUp';
+import SignIn from './components/SignIn';
 
 function App() {
 
@@ -18,8 +19,9 @@ function App() {
         <BrowserRouter>
           <Header />
             <Routes>
-              <Route path="/" element={<Navigate to="/sign_in_sign_up" />} />
-              <Route path="/sign_in_sign_up" element={<SignInSignUp />} />
+              <Route path="/" element={<Navigate to="/welcome" />} />
+              <Route path="/sign_in" element={<SignIn />} />
+              <Route path="/sign_up" element={<SignUp />} />
               <Route path="/welcome" element={<WelcomePage />} />
               <Route path="/events_page" element={<EventsPage />} />
                 <Route path="/events_page/create_event" element={<CreateEvent />} />
