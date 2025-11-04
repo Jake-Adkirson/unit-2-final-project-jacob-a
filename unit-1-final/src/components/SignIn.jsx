@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import ReusableButton from './ReusableButton';
 import ReusableLink from './ReusableLink';
+import { useAuth } from './AuthContext';
 
 const SignIn = () => {
     const [formData, setFormData] = useState({
@@ -9,8 +10,9 @@ const SignIn = () => {
         password: ""
     });
     const [message, setMessage] = useState("");
-    const [currentUser, setCurrentUser] = useState("");
-
+    const { currentUser, logout, login } = useAuth();
+    const [error, setError] = useState("");
+ 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
@@ -19,11 +21,21 @@ const SignIn = () => {
         e.preventDefault();
 
         try{
-            const res = await axios.post("http://localhost:8080/users/login", formData);
-            setCurrentUser(res.data);
-            setMessage("Sign in successful!")
+            const res = await fetch("http://localhost:8080/users/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json"},
+            body: JSON.stringify(formData),
+            });
+
+            if (res.ok) {
+                const user = await res.json();
+                login(user);
+            } else {
+                setError("Invalid credentials");
+            }
         } catch (err) {
-            setMessage("Sign in failed: " + (err.response?.data.message || err.message));
+            console.error(err);
+            setError("Something went wrong")
         }
     };
 

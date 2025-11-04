@@ -1,6 +1,7 @@
 import logo from '../assets/new-float-logo.png';
 import { Link } from 'react-router';
 import NavBar from './NavBar';
+import { useAuth } from './AuthContext';
 
 
 const Header = () => {
