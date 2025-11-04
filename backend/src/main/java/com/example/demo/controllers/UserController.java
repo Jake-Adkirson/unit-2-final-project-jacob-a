@@ -39,6 +39,18 @@ public class UserController {
         return ResponseEntity.ok(savedUser);
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<User> loginUser(@RequestBody User loginDetails) {
+        List<User> users = userRepository.findAll();
+        for (User user : users) {
+            if (user.getEmail().equals(loginDetails.getEmail()) &&
+                user.getPassword().equals(loginDetails.getPassword())) {
+                return ResponseEntity.ok(user);
+            }
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
     @PutMapping("/add/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User userDetails) {
         return userRepository.findById(id)
