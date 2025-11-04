@@ -4,26 +4,26 @@ import { Link } from 'react-router';
 import axios from 'axios';
 
 const EventsPage = () => {
-    const [data, setData] = useState([]);
+    const [rows, setRows] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const rows = data.filter(row => row.length > 0);
+
 
     useEffect(() => { //uses google sheets API to load data from google sheet in project folder
         const fetchData = async () => {
             try {
-                const response = await axios.get(
-                    `https://sheets.googleapis.com/v4/spreadsheets/1XGZyeeLtsE3gUdgYZOBrXmymrHSWkzP9dFEiNwv5dBo/values/Sheet1!A2:D500?key=AIzaSyATPhbEPCa76G2XT63QCG0mpk4Q_BYYimI`);
-                    setData(response.data.values);
-                    setLoading(false);
-            } catch (error) {
-                setError(error);
+                const res = await axios.get("http://localhost:8080/events");
+                console.log("Fetched data:", res.data);
+                setRows(res.data);
+            } catch (err) {
+                setError(err);
+            } finally {
                 setLoading(false);
             }
-        }
+        };
         fetchData();
     }, []);
-    
+
     if(loading) {
         return <p className="EventsPage">Loading events...</p>
     }
@@ -42,27 +42,31 @@ const EventsPage = () => {
                 <thead>
                     <tr>
                         <th>Event Name</th>
-                        <th>Organizer</th>
                         <th>Location</th>
                         <th>Date</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {rows.map((row, rowIndex) => (  //maps through array pulled from google sheet to display in table and make column 1 links, will be important in Unit 2 project
-                        <tr key={rowIndex}>
-                            {row.map((cell, cellIndex) => {
-                                if (cellIndex === 0) {;
-                                    return ( //Link to below redirects to /trip_page/ and adds event name from link clicked after last slash
-                                        <td key={cellIndex}>
-                                            <Link to={'/trip_page/'+ row[0]}>{cell}</Link> 
-                                        </td>
-                                    );
-                                } else {
-                                    return <td key={cellIndex}>{cell}</td>
-                                }
-                            })}
+                    {rows && rows.length > 0 ? (
+                        rows.map((event) => (
+                            <tr key={event.id}>
+                                <td>
+                                    <Link to={`/trip_page/${event.name}`}>{event.name}</Link>
+                                </td>
+                                <td>
+                                    {event.location}
+                                </td>
+                                <td>
+                                    {event.date}
+                                </td>
+                            </tr>
+                        ))
+                    ) : (
+                        <tr>
+                            <td colSpan="3">No events found</td>
                         </tr>
-                    ))}
+                    )
+                    }
                 </tbody>
             </table>
         </div>
