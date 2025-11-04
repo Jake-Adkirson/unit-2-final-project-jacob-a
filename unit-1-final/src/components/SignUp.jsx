@@ -18,12 +18,13 @@ const SignUp = () => {
 
     const handleSignUp = async (e) => {
         e.preventDefault();
+        
         try{
             const res = await axios.post("http://localhost:8080/users", formData);
             setMessage("Account created successfully!");
             setIsSignedIn(true);
-        } catch (e) {
-            setMessage("Signup failed: " + (e.response?.data.message || err.message));
+        } catch (err) {
+            setMessage("Signup failed: " + (err.response?.data.message || err.message));
         }
     };
 

@@ -9,6 +9,7 @@ const SignIn = () => {
         password: ""
     });
     const [message, setMessage] = useState("");
+    const [currentUser, setCurrentUser] = useState("");
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -18,26 +19,35 @@ const SignIn = () => {
         e.preventDefault();
 
         try{
-            const res = await axios.post("http://localhost:8080/users", formData);
-
+            const res = await axios.post("http://localhost:8080/users/login", formData);
+            setCurrentUser(res.data);
             setMessage("Sign in successful!")
-        } catch (e) {
-            setMessage("Sign in failed: " + (e.response?.data.message || err.message));
+        } catch (err) {
+            setMessage("Sign in failed: " + (err.response?.data.message || err.message));
         }
     };
 
     return(
         <div className="SignIn">
-            <h2>Sign In</h2>
-            <form>
-                Email: <input required type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Enter email..." />
-                Password: <input required type="password" name="password" value={formData.password} onChange={handleChange} placeholder="Enter password..." />
-                <br/>
-                <button onClick={handleSignIn}>Sign In</button>
-                <ReusableButton>
-                    <ReusableLink to={"/sign_up"}>Sign Up</ReusableLink>
-                </ReusableButton>
-            </form>
+            {!currentUser ? (
+                <div>
+                <h2>Sign In</h2>
+                <form>
+                    Email: <input required type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Enter email..." />
+                    Password: <input required type="password" name="password" value={formData.password} onChange={handleChange} placeholder="Enter password..." />
+                    <br/>
+                    <button onClick={handleSignIn}>Sign In</button>
+                    <ReusableButton>
+                        <ReusableLink to={"/sign_up"}>Sign Up</ReusableLink>
+                    </ReusableButton>
+                </form>
+                </div>
+            ) : (
+                <div>
+                    <h2>Welcome, {currentUser.name}!</h2>
+                    <p>You are now logged in.</p>
+                </div>
+        )}
         </div>
     );
 }
