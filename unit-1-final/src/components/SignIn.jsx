@@ -10,7 +10,7 @@ const SignIn = () => {
         password: ""
     });
     const [message, setMessage] = useState("");
-    const { currentUser, logout, login } = useAuth();
+    const { currentUser, login } = useAuth();
     const [error, setError] = useState("");
  
     const handleChange = (e) => {
@@ -21,21 +21,14 @@ const SignIn = () => {
         e.preventDefault();
 
         try{
-            const res = await fetch("http://localhost:8080/users/login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json"},
-            body: JSON.stringify(formData),
-            });
+            
+            await login(formData.email, formData.password);
 
-            if (res.ok) {
-                const user = await res.json();
-                login(user);
-            } else {
-                setError("Invalid credentials");
-            }
+            alert("Login successful!");
+            setError("");
         } catch (err) {
-            console.error(err);
-            setError("Something went wrong")
+            console.error("Login error: ", err);
+            setError("Invalid credentials or login failed.")
         }
     };
 

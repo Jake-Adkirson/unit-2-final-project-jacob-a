@@ -9,11 +9,10 @@ const EventsPage = () => {
     const [error, setError] = useState(null);
 
 
-    useEffect(() => { //uses google sheets API to load data from google sheet in project folder
+    useEffect(() => { 
         const fetchData = async () => {
             try {
                 const res = await axios.get("http://localhost:8080/events");
-                console.log("Fetched data:", res.data);
                 setRows(res.data);
             } catch (err) {
                 setError(err);
