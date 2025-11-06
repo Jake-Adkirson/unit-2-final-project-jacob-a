@@ -1,10 +1,14 @@
 package com.example.demo.models;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class Users {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -12,10 +16,18 @@ public class User {
 
     private String name;
 
+    @Column(unique = true)
     private String email;
 
     //TODO: Add secure handling for passwords
     private String password;
+
+    @Column
+    @CreationTimestamp
+    private Timestamp createdAt;
+
+    @UpdateTimestamp
+    private Timestamp updatedAt;
 
     private String watercraft;
 
@@ -23,8 +35,18 @@ public class User {
 
     private String location;
 
-    public User(){
+    public Users(){
+    }
 
+    public Users(String name, String email, String password, Timestamp createdAt, Timestamp updatedAt, String watercraft, int age, String location) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.watercraft = watercraft;
+        this.age = age;
+        this.location = location;
     }
 
     public Long getId(){
@@ -61,6 +83,22 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Timestamp getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Timestamp getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Timestamp updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public String getWatercraft() {

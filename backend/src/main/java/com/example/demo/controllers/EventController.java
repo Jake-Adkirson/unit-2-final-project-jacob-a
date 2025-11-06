@@ -1,9 +1,9 @@
 package com.example.demo.controllers;
 
 import com.example.demo.models.Event;
-import com.example.demo.models.User;
+import com.example.demo.models.Users;
 import com.example.demo.repositories.EventRepository;
-import com.example.demo.repositories.UserRepository;
+import com.example.demo.repositories.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,7 +21,7 @@ public class EventController {
     private EventRepository eventRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private UsersRepository usersRepository;
 
     @GetMapping
     public ResponseEntity<?> getAllEvents() {
@@ -30,7 +30,7 @@ public class EventController {
     }
 
     @GetMapping(value="{id}", produces= MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getArtworkById(@PathVariable Long id) throws Exception {
+    public ResponseEntity<?> getArtworkById(@PathVariable Integer id) throws Exception {
         Event event = eventRepository.findById(id).orElse(null);
         if (event == null) {
           throw new Exception("Event not found");
@@ -45,9 +45,9 @@ public class EventController {
     }
 
     @PostMapping("/{id}/attendees/{userId}")
-    public ResponseEntity<?> addAttendee(@PathVariable Long id, @PathVariable Long userId) {
+    public ResponseEntity<?> addAttendee(@PathVariable Integer id, @PathVariable Integer userId) {
         Optional<Event> eventOptional = eventRepository.findById(id);
-        Optional<User> userOptional = userRepository.findById(userId);
+        Optional<Users> userOptional = usersRepository.findById(userId);
         if (eventOptional.isEmpty() || userOptional.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
@@ -58,7 +58,7 @@ public class EventController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteEvent(@PathVariable Long id) throws Exception {
+    public ResponseEntity<?> deleteEvent(@PathVariable Integer id) throws Exception {
         Event event = eventRepository.findById(id).orElse(null);
         if (event == null) {
             throw new Exception("Event not found");

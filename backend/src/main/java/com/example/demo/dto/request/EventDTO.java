@@ -1,18 +1,8 @@
-package com.example.demo.models;
-
-import jakarta.persistence.*;
+package com.example.demo.dto.request;
 
 import java.sql.Timestamp;
-import java.util.HashSet;
-import java.util.Set;
 
-@Entity
-@Table(name = "events")
-public class Event {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class EventDTO {
 
     private String name;
     private String location;
@@ -20,27 +10,12 @@ public class Event {
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
-    @ManyToMany
-    @JoinTable(
-        name = "event_attendees",
-        joinColumns = @JoinColumn(name = "event_id"),
-        inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    private Set<Users> attendees = new HashSet<>();
-
-    public Event(){
-    }
-
-    public Event(String name, String location, String date, Timestamp createdAt, Timestamp updatedAt) {
+    public EventDTO(String name, String location, String date, Timestamp createdAt, Timestamp updatedAt) {
         this.name = name;
         this.location = location;
         this.date = date;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-    }
-
-    public Long getId(){
-        return id;
     }
 
     public String getName() {
@@ -65,22 +40,6 @@ public class Event {
 
     public void setDate(String date) {
         this.date = date;
-    }
-
-    public Set<Users> getAttendees() {
-        return attendees;
-    }
-
-    public void setAttendees(Set<Users> attendees) {
-        this.attendees = attendees;
-    }
-
-    public void addAttendee(Users users) {
-        this.attendees.add(users);
-    }
-
-    public void removeAttendee(Users users) {
-        this.attendees.remove(users);
     }
 
     public Timestamp getCreatedAt() {

@@ -1,22 +1,39 @@
-package com.example.demo.dto;
+package com.example.demo.dto.request;
 
-public class UserDTO {
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
+import java.sql.Timestamp;
+
+
+public class UsersRequestDTO {
+
+    @NotBlank
+    @Size(min = 3, message = "Name must be at least 3 characters long")
     private String name;
 
+    @NotNull(message = "Email is required")
+    @Email(message = "Provide email address")
     private String email;
 
-    //TODO: Add secure handling for passwords
+    @NotNull(message = "Password is required")
+    @Size(min = 5, message = "Password must be at least 5 characters")
     private String password;
 
+    private int age;
     private String watercraft;
-
     private String location;
 
-    public UserDTO(String name, String email, String password, String watercraft, String location) {
+    public UsersRequestDTO(){
+    }
+
+    public UsersRequestDTO(String name, String email, String password, int age, String watercraft, String location) {
         this.name = name;
         this.email = email;
         this.password = password;
+        this.age = age;
         this.watercraft = watercraft;
         this.location = location;
     }
@@ -43,6 +60,14 @@ public class UserDTO {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
     }
 
     public String getWatercraft() {
