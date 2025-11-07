@@ -1,11 +1,15 @@
 package com.example.demo.controllers;
 
+import com.example.demo.dto.UsersDTO;
 import com.example.demo.models.Users;
 import com.example.demo.repositories.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,6 +34,24 @@ public class UsersController {
             throw new Exception("User not found");
         }
         return new ResponseEntity<>(users, HttpStatus.OK);
+    }
+
+    @GetMapping("/current")
+    public ResponseEntity<UsersDTO> getCurrentUser(@AuthenticationPrincipal User principal) {
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        Users user = usersRepository.findByEmail(principal.getUsername()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        UsersDTO dto = new UsersDTO();
+        dto.setEmail(user.getEmail());
+        dto.setName(user.getName());
+        dto.setAge(user.getAge());
+        dto.setLocation(user.getLocation());
+        dto.setWatercraft(user.getWatercraft());
+
+        return ResponseEntity.ok(dto);
     }
 
     @PutMapping("/add/{id}")
