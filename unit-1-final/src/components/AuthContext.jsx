@@ -75,7 +75,6 @@ const AuthProvider = ({ children }) => {
     const logout = () => {
         setCurrentUser(null);
         setToken(null);
-        localStorage.removeItem("token");
     }
 
     return <AuthContext.Provider value={{ currentUser, token, login, logout, loading }}>{children}</AuthContext.Provider>;

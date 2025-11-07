@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router';
+import { Link, useParams } from 'react-router';
 import axios from 'axios';
 
 const EventsPage = () => {
     const [rows, setRows] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    
 
 
     useEffect(() => { 
@@ -50,7 +51,7 @@ const EventsPage = () => {
                         rows.map((event) => (
                             <tr key={event.id}>
                                 <td>
-                                    <Link to={`/trip_page/${event.name}`}>{event.name}</Link>
+                                    <Link to={`/events/${event.id}`}>{event.name}</Link>
                                 </td>
                                 <td>
                                     {event.location}
