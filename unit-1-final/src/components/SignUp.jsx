@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from './AuthContext';
@@ -14,13 +14,13 @@ const SignUp = () => {
         location: ""
     });
     const [message, setMessage] = useState("");
-
     const { currentUser } = useAuth();
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value })
     };
 
+    //reaches out to back-end to register user, also redirects to sign in page, would like to refactor to auto sign in later
     const handleSignUp = async (e) => {
         e.preventDefault();
         

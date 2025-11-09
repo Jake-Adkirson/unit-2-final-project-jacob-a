@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Link, useParams } from 'react-router';
+import { Link } from 'react-router';
 import axios from 'axios';
 
 const EventsPage = () => {
@@ -9,7 +9,7 @@ const EventsPage = () => {
     const [error, setError] = useState(null);
     
 
-
+    //reaches out to backend to GET event data
     useEffect(() => { 
         const fetchData = async () => {
             try {
@@ -32,6 +32,7 @@ const EventsPage = () => {
         alert(error.message);
     }
 
+    //maps through events to display necessary data and show names as links
     return(
         <div className="EventsPage">
             <h2>Events</h2>

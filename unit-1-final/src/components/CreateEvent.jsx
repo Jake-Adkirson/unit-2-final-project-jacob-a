@@ -14,6 +14,7 @@ const CreateEvent = () => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
+    //reaches out to backend to POST new event
     const handleSubmit = async (e) => {
         e.preventDefault();
         

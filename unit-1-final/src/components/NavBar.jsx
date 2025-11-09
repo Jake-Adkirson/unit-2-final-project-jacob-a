@@ -1,9 +1,7 @@
 import ReusableButton from './ReusableButton';
 import ReusableLink from './ReusableLink';
-import { useAuth } from './AuthContext';
 
 const NavBar = () => {
-    const { currentUser, isLoggedIn, logout } = useAuth();
 
     return( //utilizes reusable button and link
     <div className="NavBar">
