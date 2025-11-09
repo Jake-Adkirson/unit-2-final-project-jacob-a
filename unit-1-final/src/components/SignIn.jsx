@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import axios from "axios";
 import ReusableButton from './ReusableButton';
 import ReusableLink from './ReusableLink';
 import { useAuth } from './AuthContext';
@@ -9,9 +8,7 @@ const SignIn = () => {
         email: "",
         password: ""
     });
-    const [message, setMessage] = useState("");
     const { currentUser, login } = useAuth();
-    const [error, setError] = useState("");
  
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -25,10 +22,8 @@ const SignIn = () => {
             await login(formData.email, formData.password);
 
             alert("Login successful!");
-            setError("");
         } catch (err) {
-            console.error("Login error: ", err);
-            setError("Invalid credentials or login failed.")
+            alert("Login error: ", err);
         }
     };
 

@@ -29,6 +29,9 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.GET, "/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/**").permitAll()
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/**").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/**").permitAll()
 
                         .anyRequest().authenticated()
                 )

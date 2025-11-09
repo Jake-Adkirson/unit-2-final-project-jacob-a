@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from './AuthContext';
 
 const SignUp = () => {
+    const navigate = useNavigate()
     const [formData, setFormData] = useState({
         name: "",
         email: "",
         password: "",
-        prefWatercraft: "",
+        watercraft: "",
         age: "",
         location: ""
     });
@@ -25,6 +27,7 @@ const SignUp = () => {
         try{
             const res = await axios.post("http://localhost:8080/users/register", formData);
             alert("Account created successfully!");
+            navigate('/sign_in');
         } catch (err) {
             alert("Signup failed: " + (err.response?.data.message || err.message));
         }

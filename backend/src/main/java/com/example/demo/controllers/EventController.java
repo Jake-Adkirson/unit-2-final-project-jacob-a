@@ -38,7 +38,7 @@ public class EventController {
         return new ResponseEntity<>(event, HttpStatus.OK);
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<Event> createEvent(@RequestBody Event event) {
         eventRepository.save(event);
         return new ResponseEntity<>(event, HttpStatus.CREATED);
@@ -54,6 +54,28 @@ public class EventController {
         Event event = eventOptional.get();
         event.addAttendee(userOptional.get());
         eventRepository.save(event);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{id}/attendees/{userId}")
+    public ResponseEntity<?> removeAttendee(@PathVariable Integer id, @PathVariable Integer userId) {
+        Optional<Event> eventOptional = eventRepository.findById(id);
+        Optional<Users> userOptional = usersRepository.findById(userId);
+
+        if (eventOptional.isEmpty() || userOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Event event = eventOptional.get();
+        Users user = userOptional.get();
+
+        if (!event.getAttendees().contains(user)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User is not an attendee of the event");
+        }
+
+        event.removeAttendee(user);
+        eventRepository.save(event);
+
         return ResponseEntity.ok().build();
     }
 
