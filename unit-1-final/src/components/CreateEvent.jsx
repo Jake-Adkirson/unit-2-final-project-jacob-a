@@ -1,41 +1,39 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom'
+import axios from "axios";
 
 const CreateEvent = () => {
-    const [eventName, setEventName] = useState('');
-    const [orgName, setOrgName] = useState('');
-    const [location, setLocation] = useState('');
-    const [date, setDate] = useState('');
+    const navigate = useNavigate()
+    const [formData, setFormData] = useState({
+        name: "",
+        location: "",
+        date: ""
+    });
 
-    const handleSubmit = (e) => {  //handles form submission and pushes data to google sheets that is located in my project folder
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        fetch('https://hooks.zapier.com/hooks/catch/23886457/u2vppas/', { 
-            method: "POST",
-            body: JSON.stringify({ eventName, orgName, location, date }),
-        }) .then(() => window.location.reload(), alert('Thank you for uploading your event!'));
-    }
-
-    const handleNameChange = (e) => {
-    setEventName(e.target.value);
-}
-    const handleOrgChange = (e) => {
-    setOrgName(e.target.value);
-}
-    const handleLocationChange = (e) => {
-    setLocation(e.target.value);
-}
-    const handleDateChange = (e) => {
-    setDate(e.target.value);
-}
+        
+        try{
+            const res = await axios.post("http://localhost:8080/events/create", formData);
+            alert("Event created successfully!");
+            navigate('/events_page');
+        } catch (err) {
+            alert("Creation failed: " + (err.response?.data.message || err.message));
+        }
+    };
 
 
     return(
         <div className="MakeEvntFrm">
             <form onSubmit={handleSubmit}>
                 <label>
-                    Event Name: <input type="text" name="eventName" value={eventName} onChange={handleNameChange} />
-                    Organizer: <input type='text' name='orgName' value={orgName} onChange={handleOrgChange} />
-                    Location: <input type="text" name="location" value={location} onChange={handleLocationChange}  />
-                    Date: <input type="text" name="date" value={date} onChange={handleDateChange} />
+                    Event Name: <input type="text" name="name" value={formData.name} onChange={handleChange} />
+                    Location: <input type="text" name="location" value={formData.location} onChange={handleChange}  />
+                    Date: <input type="text" name="date" value={formData.date} onChange={handleChange} />
                 </label>
                 <br/>
                 <button type="submit">Submit</button>

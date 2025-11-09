@@ -3,7 +3,6 @@ import { useAuth } from './AuthContext';
 
 const UserProfile = () => {
     const { currentUser } = useAuth();
-
     return( 
         <div>
         {currentUser ? ( 

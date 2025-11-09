@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router';
-
+import { useAuth } from './AuthContext';
 
 const TripPage = () => {
     const { eventId } = useParams();
     const [event, setEvent] = useState(null);
+    const { currentUser } = useAuth();
 
     useEffect(() => {
-        console.log("Fetching event with id: ", eventId)
         fetch(`http://localhost:8080/events/${eventId}`).then(res => {
             if (!res.ok) throw new Error("Item not found.");
             return res.json();
@@ -21,6 +21,37 @@ const TripPage = () => {
         });
     }, [eventId]);
 
+    const handleClick = async () => {
+
+        try {
+            const res = await fetch(`http://localhost:8080/events/${eventId}/attendees/${currentUser.id}`, {
+                method: "POST",
+                credentials: "include",
+            });
+
+            alert("Successfully joined event!")
+            window.location.reload(false);
+        } catch (err) {
+            alert("Failed to join event")
+        }
+    }
+
+    const leaveEvent = async () => {
+
+        try {
+            const res = await fetch(`http://localhost:8080/events/${eventId}/attendees/${currentUser.id}`, {
+                method: "DELETE"
+            });
+
+            if (res.ok) {
+                alert("You've been removed from this event.");
+                window.location.reload(false);
+            }
+        } catch (err) {
+            alert("Failed to remove from event")
+        }
+    }
+
     if (!event) return <p>Loading...</p>
 
     return(
@@ -28,9 +59,7 @@ const TripPage = () => {
             <h2>Event Details</h2>
             <p>{event.name} | {event.location} | {event.date} </p>
             <h2>Attendees</h2>
-            <button>
-                <Link to="/join_event">Join Event</Link>
-            </button>
+            <button onClick={handleClick}>Join Event</button>
             <br/>
             <table className="Data" border="1" cellPadding="8" style={{ borderCollapse: "collapse" }}>
                 <thead>
@@ -56,6 +85,7 @@ const TripPage = () => {
                     )}
                 </tbody>
             </table>
+            <button onClick={leaveEvent}>Leave Event</button>
         </div>
     );
 }

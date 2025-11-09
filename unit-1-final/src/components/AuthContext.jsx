@@ -14,12 +14,13 @@ const AuthProvider = ({ children }) => {
                 setLoading(false);
                 return;
             }
-
+            console.log("Current token before fetch:", token)
             try {
                 const res = await fetch("http://localhost:8080/users/current", {
                     method: "GET",
                     headers: {
-                        "Content-Type": "application/json"
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
                     },
             });
 
@@ -66,6 +67,8 @@ const AuthProvider = ({ children }) => {
 
             const userData = await userRes.json();
             setCurrentUser(userData);
+            setToken(data.token);
+            localStorage.setItem("token", data.token);
         } catch (err) {
             console.error("Login error: ", err);
             throw err;
@@ -76,7 +79,6 @@ const AuthProvider = ({ children }) => {
         setCurrentUser(null);
         setToken(null);
     }
-
     return <AuthContext.Provider value={{ currentUser, token, login, logout, loading }}>{children}</AuthContext.Provider>;
 }
 
