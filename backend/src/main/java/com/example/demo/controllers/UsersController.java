@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +18,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/users")
 public class UsersController {
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private UsersRepository usersRepository;
@@ -61,9 +65,12 @@ public class UsersController {
                 .map(existingUser -> {
                     existingUser.setEmail(usersDetails.getEmail());
                     existingUser.setName(usersDetails.getName());
-                    existingUser.setPassword(usersDetails.getPassword());
                     existingUser.setLocation(usersDetails.getLocation());
                     existingUser.setWatercraft(usersDetails.getWatercraft());
+
+                    if (usersDetails.getPassword() != null && !usersDetails.getPassword().isEmpty()) {
+                        existingUser.setPassword(passwordEncoder.encode(usersDetails.getPassword()));
+                    }
 
                     Users updatedUsers = usersRepository.save(existingUser);
                     return ResponseEntity.ok(updatedUsers);
