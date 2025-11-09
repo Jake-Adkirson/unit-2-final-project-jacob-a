@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import { useAuth } from './AuthContext';
 
 const TripPage = () => {
@@ -7,6 +7,7 @@ const TripPage = () => {
     const [event, setEvent] = useState(null);
     const { currentUser } = useAuth();
 
+    //works with back-end to setEvent to currently selected event
     useEffect(() => {
         fetch(`http://localhost:8080/events/${eventId}`).then(res => {
             if (!res.ok) throw new Error("Item not found.");
@@ -21,6 +22,7 @@ const TripPage = () => {
         });
     }, [eventId]);
 
+    //handles join event button click to work with back-end to add user to event
     const handleClick = async () => {
 
         try {
@@ -36,6 +38,8 @@ const TripPage = () => {
         }
     }
 
+
+    //handles leave event button click to work with back-end to remove user from event
     const leaveEvent = async () => {
 
         try {
@@ -54,6 +58,8 @@ const TripPage = () => {
 
     if (!event) return <p>Loading...</p>
 
+    //maps through array of attendees within the event to display attendee info
+    //conditionally renders to say new event details if none available, but ideally this should never happen with how things are setup
     return(
         <div className="TripPage">
             <h2>Event Details</h2>

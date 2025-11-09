@@ -1,5 +1,6 @@
 import { useAuth } from './AuthContext';
 import { useState, useEffect } from 'react';
+import ReusableInputField from './ReusableInputField';
 
 const UserProfile = () => {
     const { currentUser, updateUser } = useAuth();
@@ -13,6 +14,7 @@ const UserProfile = () => {
         location: ""
     });
 
+    //presets form data on account editor to have current information populated
         useEffect(() => {
             if (currentUser) {
                 setFormData({
@@ -26,11 +28,13 @@ const UserProfile = () => {
             }
         }, [currentUser]);
 
+        //updates formData based on user inputs
         const handleChange = (e) => {
             const { name, value } = e.target;
             setFormData((prev) => ({ ...prev, [name]: value}));
         };
 
+        //utilizes updateUser to send updated info to back-end and sets edit mode to false to give normal profile view back
         const handleSubmit = async (e) => {
             e.preventDefault();
             try {
@@ -42,6 +46,8 @@ const UserProfile = () => {
             }
         }
 
+    //conditionally renders please sign in message if not signed in, also conditionally renders profile/updater based on state of editMode
+    //populates user info based on currentUser
     return( 
         <div>
         {currentUser ? ( 
@@ -52,27 +58,27 @@ const UserProfile = () => {
                 <form onSubmit={handleSubmit}>
                     <div>
                         <label>Name: </label>
-                        <input type="text" name="name" value={formData.name} onChange={handleChange}/>
+                        <ReusableInputField type={"text"} name="name" value={formData.name} onChange={handleChange}/>
                     </div>
                     <div>
                         <label>Email: </label>
-                        <input type="text" name="email" value={formData.email} onChange={handleChange}/>
+                        <ReusableInputField type={"text"} name="email" value={formData.email} onChange={handleChange}/>
                     </div>
                     <div>
                         <label>Password: </label>
-                        <input type="text" name="password" value={formData.password} onChange={handleChange}/>
+                        <ReusableInputField type={"text"} name="password" value={formData.password} onChange={handleChange}/>
                     </div>
                     <div>
                         <label>Watercraft: </label>
-                        <input type="text" name="watercraft" value={formData.watercraft} onChange={handleChange}/>
+                        <ReusableInputField type={"text"} name="watercraft" value={formData.watercraft} onChange={handleChange}/>
                     </div>
                     <div>
                         <label>Age: </label>
-                        <input type="text" name="age" value={formData.age} onChange={handleChange}/>
+                        <ReusableInputField type={"text"} name="age" value={formData.age} onChange={handleChange}/>
                     </div>
                     <div>
                         <label>Location: </label>
-                        <input type="text" name="location" value={formData.location} onChange={handleChange}/>
+                        <ReusableInputField type={"text"} name="location" value={formData.location} onChange={handleChange}/>
                     </div>
                     <button type="submit">Update Account</button>
                 </form>

@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
+import { createContext, useState, useEffect, useContext } from 'react';
 
 const AuthContext = createContext();
 
@@ -7,41 +7,46 @@ const AuthProvider = ({ children }) => {
     const [token, setToken] = useState(localStorage.getItem("token") || null);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        const fetchCurrentUser = async () => {
-            if (!token) {
-                setCurrentUser(null);
-                setLoading(false);
-                return;
-            }
-            console.log("Current token before fetch:", token)
-            try {
-                const res = await fetch("http://localhost:8080/users/current", {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${token}`
-                    },
+    //reusable function to fetch current user
+    const fetchCurrentUser = async (authToken = token) => {
+        if (!authToken) {
+            setCurrentUser(null);
+            setLoading(false);
+            return;
+        }
+
+        try {
+            const res = await fetch("http://localhost:8080/users/current", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${authToken}`,
+                },
             });
 
-            if (!res.ok) {
-                throw new Error("Failed to fetch current user");
-            }
+            if (!res.ok) throw new Error("Failed to fetch current user");
 
             const data = await res.json();
             setCurrentUser(data);
-            } catch (err) {
-                console.error("Error fetching current user: ", err);
-                setCurrentUser(null);
-                localStorage.removeItem("token");
-                setToken(null);
-            } finally {
-                setLoading(false);
-            }
-        };
+        } catch (err) {
+            console.error("Error fetching current user: ", err);
+            setCurrentUser(null);
+            localStorage.removeItem("token");
+            setToken(null);
+        } finally {
+            setLoading(false);
+        }
+    };
 
-        fetchCurrentUser();
-    }, [token])
+    //fetch current user whenever token changes
+    useEffect(() => {
+        if (token) {
+            fetchCurrentUser();
+        } else {
+            setCurrentUser(null);
+            setLoading(false);
+        }
+    }, [token]);
 
     const updateUser = async (newData) => {
         try {
@@ -76,18 +81,6 @@ const AuthProvider = ({ children }) => {
 
             const data = await res.json();
 
-            const userRes = await fetch("http://localhost:8080/users/current", {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${data.token}`
-                }
-            });
-
-            if (!userRes.ok) throw new Error("Failed to fetch user after login");
-
-            const userData = await userRes.json();
-            setCurrentUser(userData);
             setToken(data.token);
             localStorage.setItem("token", data.token);
         } catch (err) {

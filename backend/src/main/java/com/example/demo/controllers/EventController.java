@@ -29,6 +29,7 @@ public class EventController {
         return new ResponseEntity<>(allEvents, HttpStatus.OK);
     }
 
+    //Get event by ID
     @GetMapping(value="{id}", produces= MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getArtworkById(@PathVariable Integer id) throws Exception {
         Event event = eventRepository.findById(id).orElse(null);
@@ -38,12 +39,14 @@ public class EventController {
         return new ResponseEntity<>(event, HttpStatus.OK);
     }
 
+    // Create new event
     @PostMapping("/create")
     public ResponseEntity<Event> createEvent(@RequestBody Event event) {
         eventRepository.save(event);
         return new ResponseEntity<>(event, HttpStatus.CREATED);
     }
 
+    // Add attendee to event
     @PostMapping("/{id}/attendees/{userId}")
     public ResponseEntity<?> addAttendee(@PathVariable Integer id, @PathVariable Integer userId) {
         Optional<Event> eventOptional = eventRepository.findById(id);
@@ -57,6 +60,7 @@ public class EventController {
         return ResponseEntity.ok().build();
     }
 
+    // Remove attendee from event
     @DeleteMapping("/{id}/attendees/{userId}")
     public ResponseEntity<?> removeAttendee(@PathVariable Integer id, @PathVariable Integer userId) {
         Optional<Event> eventOptional = eventRepository.findById(id);
@@ -79,6 +83,7 @@ public class EventController {
         return ResponseEntity.ok().build();
     }
 
+    // Delete event by ID, currently not utilized in the application, plans to implement later
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteEvent(@PathVariable Integer id) throws Exception {
         Event event = eventRepository.findById(id).orElse(null);

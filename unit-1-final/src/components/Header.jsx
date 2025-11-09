@@ -7,7 +7,7 @@ import { useAuth } from './AuthContext';
 const Header = () => {
     const { currentUser, logout } = useAuth();
 
-        return ( //conditional formatting to either display sign in with delete account button disabled or sign out with delete button enabled
+        return ( //conditional formatting to either display sign in with logout account button disabled or sign out with logout button enabled
             <div>
             {!currentUser ? (
                 <div>

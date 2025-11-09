@@ -25,12 +25,14 @@ public class UsersController {
     @Autowired
     private UsersRepository usersRepository;
 
+    // Get all users
     @GetMapping
     public ResponseEntity<?> getAllUsers() {
         List<Users> users = usersRepository.findAll();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
+    //Get user by ID
     @GetMapping(value="/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getUserById(@PathVariable Integer id) throws Exception {
         Users users = usersRepository.findById(id).orElse(null);
@@ -40,6 +42,7 @@ public class UsersController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
+    // Get current authenticated user
     @GetMapping("/current")
     public ResponseEntity<UsersDTO> getCurrentUser(@AuthenticationPrincipal User principal) {
         if (principal == null) {
@@ -59,6 +62,7 @@ public class UsersController {
         return ResponseEntity.ok(dto);
     }
 
+    // Update user by ID
     @PutMapping("/add/{id}")
     public ResponseEntity<Users> updateUser(@PathVariable Integer id, @RequestBody Users usersDetails) {
         return usersRepository.findById(id)
@@ -78,6 +82,7 @@ public class UsersController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    // Delete user by ID
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable Integer id) throws Exception {
         Users users = usersRepository.findById(id).orElse(null);
