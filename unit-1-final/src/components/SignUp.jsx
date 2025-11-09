@@ -9,7 +9,7 @@ const SignUp = () => {
         name: "",
         email: "",
         password: "",
-        prefWatercraft: "",
+        watercraft: "",
         age: "",
         location: ""
     });

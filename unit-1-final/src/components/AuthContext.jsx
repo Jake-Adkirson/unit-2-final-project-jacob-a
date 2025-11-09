@@ -43,6 +43,27 @@ const AuthProvider = ({ children }) => {
         fetchCurrentUser();
     }, [token])
 
+    const updateUser = async (newData) => {
+        try {
+            const res = await fetch(`http://localhost:8080/users/add/${currentUser.id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-type": "application/json",
+                },
+                body: JSON.stringify(newData),
+            }
+            );
+            if (!res.ok) throw new Error("Failed to update user");
+
+            const updateUser = await res.json();
+            setCurrentUser(updateUser);
+            return updateUser
+        } catch (err) {
+            console.error(err);
+            throw err;
+        }
+    }
+
     const login = async (email, password) => {
         try {
             const res = await fetch("http://localhost:8080/users/login", {
@@ -80,7 +101,7 @@ const AuthProvider = ({ children }) => {
         setToken(null);
         localStorage.removeItem("token");
     }
-    return <AuthContext.Provider value={{ currentUser, token, login, logout, loading }}>{children}</AuthContext.Provider>;
+    return <AuthContext.Provider value={{ currentUser, updateUser, token, login, logout, loading }}>{children}</AuthContext.Provider>;
 }
 
 export const useAuth = () => useContext(AuthContext);
