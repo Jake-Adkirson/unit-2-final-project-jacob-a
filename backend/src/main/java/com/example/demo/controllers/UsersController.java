@@ -45,6 +45,7 @@ public class UsersController {
         Users user = usersRepository.findByEmail(principal.getUsername()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         UsersDTO dto = new UsersDTO();
+        dto.setId(user.getId());
         dto.setEmail(user.getEmail());
         dto.setName(user.getName());
         dto.setAge(user.getAge());
