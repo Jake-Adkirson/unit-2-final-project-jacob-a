@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 
 public class UsersDTO {
 
+    //takes in Id since value is needed for front-end operations
     private Long id;
     private String name;
     private String email;
