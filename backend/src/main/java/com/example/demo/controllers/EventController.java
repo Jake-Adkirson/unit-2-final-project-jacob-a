@@ -31,7 +31,7 @@ public class EventController {
 
     //Get event by ID
     @GetMapping(value="{id}", produces= MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getArtworkById(@PathVariable Integer id) throws Exception {
+    public ResponseEntity<?> getEventById(@PathVariable Integer id) throws Exception {
         Event event = eventRepository.findById(id).orElse(null);
         if (event == null) {
           throw new Exception("Event not found");
